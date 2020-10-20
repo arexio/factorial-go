@@ -41,29 +41,29 @@ func NewOAuthProvider(opts ...OAuthProviderOption) *OAuthProvider {
 	return provider
 }
 
-// SetClientID will setup a new clientID for the OAuth2 config
-func SetClientID(clientID string) OAuthProviderOption {
+// WithClientID will setup a new clientID for the OAuth2 config
+func WithClientID(clientID string) OAuthProviderOption {
 	return func(o *OAuthProvider) {
 		o.conf.ClientID = clientID
 	}
 }
 
-// SetClientSecret will setup a new client secret for the OAuth2 config
-func SetClientSecret(clientSecret string) OAuthProviderOption {
+// WithClientSecret will setup a new client secret for the OAuth2 config
+func WithClientSecret(clientSecret string) OAuthProviderOption {
 	return func(o *OAuthProvider) {
 		o.conf.ClientSecret = clientSecret
 	}
 }
 
-// SetScopes will setup the scopes that the OAuth2 should ask
-func SetScopes(scopes []string) OAuthProviderOption {
+// WithScopes will setup the scopes that the OAuth2 should ask
+func WithScopes(scopes []string) OAuthProviderOption {
 	return func(o *OAuthProvider) {
 		o.conf.Scopes = scopes
 	}
 }
 
-// SetRedirectURL will setup the redirect url needed for OAuth2
-func SetRedirectURL(redirectURL string) OAuthProviderOption {
+// WithRedirectURL will setup the redirect url needed for OAuth2
+func WithRedirectURL(redirectURL string) OAuthProviderOption {
 	return func(o *OAuthProvider) {
 		o.conf.RedirectURL = redirectURL
 	}
