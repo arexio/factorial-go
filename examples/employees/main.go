@@ -5,10 +5,26 @@ import (
 	"log"
 
 	factorial "github.com/charly3pins/factorial-go"
+	"golang.org/x/oauth2"
 )
 
 func main() {
-	cli, err := factorial.New("ACCESS_TOKEN")
+	// Fill the empty values with your provided
+	// factorial app values
+	provider := factorial.NewOAuthProvider(
+		factorial.WithClientID(""),
+		factorial.WithClientSecret(""),
+		factorial.WithScopes([]string{}),
+		factorial.WithRedirectURL(""),
+	)
+
+	// Fill the empty token with the one provided
+	// from factorial
+	token := &oauth2.Token{}
+
+	cli, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
 	if err != nil {
 		log.Println(err)
 		return
