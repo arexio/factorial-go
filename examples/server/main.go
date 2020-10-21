@@ -17,19 +17,26 @@ import (
 )
 
 var (
-	clientID, clienSecret, redirectURL string
-	scopes                             []string
-	provider                           factorial.OAuthProvider
+	clientID, clientSecret, redirectURL string
+	scopes                              []string
+	provider                            *factorial.OAuthProvider
 )
 
 func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Panicln("No .env file found")
 	}
+
 	clientID = os.Getenv("CLIENT_ID")
-	clienSecret = os.Getenv("CLIENT_SECRET")
+	clientSecret = os.Getenv("CLIENT_SECRET")
 	scopes = strings.Split(os.Getenv("SCOPES"), ",")
 	redirectURL = os.Getenv("REDIRECT_URL")
+	provider = factorial.NewOAuthProvider(
+		factorial.WithClientID(clientID),
+		factorial.WithClientSecret(clientSecret),
+		factorial.WithScopes(scopes),
+		factorial.WithRedirectURL(redirectURL),
+	)
 }
 
 func main() {

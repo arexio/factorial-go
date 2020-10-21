@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	factorial "github.com/charly3pins/factorial-go"
+	factorial "github.com/arexio/factorial-go"
 	"golang.org/x/oauth2"
 )
 
