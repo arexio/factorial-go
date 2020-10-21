@@ -4,7 +4,7 @@ This example will run a server on port 3000 with the given .env configuration. I
 
 ## How it works
 
-We recommend you to start by reading the official documentation from Factorial https://docs.factorialhr.com/docs/getting-started and then start creating your own OAuth App in factorial (https://docs.factorialhr.com/docs/create-a-new-oauth-application).
+We recommend you to start by reading the official documentation from Factorial https://docs.factorialhr.com/docs/getting-started and then start creating your own OAuth App in Factorial (https://docs.factorialhr.com/docs/create-a-new-oauth-application).
 
 During the creation process you will be asked to introduce a callback url, that it should be https. In our case we use ngrok in order to expose our local server to the internet. If you want to download and play with ngrok please refer to the official documentation https://ngrok.com/.
 
