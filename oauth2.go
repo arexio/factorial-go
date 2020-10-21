@@ -2,7 +2,6 @@ package factorial
 
 import (
 	"context"
-	"log"
 	"net/http"
 
 	"golang.org/x/oauth2"
@@ -73,7 +72,6 @@ func WithRedirectURL(redirectURL string) OAuthProviderOption {
 // GetAuthURL will return the return the url for redirect
 // and start the OAuth2 process
 func (o OAuthProvider) GetAuthURL(state string) string {
-	log.Println("[DEBUG] provider", o, o.conf)
 	return o.conf.AuthCodeURL(state)
 }
 

@@ -14,12 +14,14 @@ import (
 	"github.com/arexio/factorial-go"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"golang.org/x/oauth2"
 )
 
 var (
 	clientID, clientSecret, redirectURL string
 	scopes                              []string
 	provider                            *factorial.OAuthProvider
+	token                               *oauth2.Token
 )
 
 func init() {
@@ -48,6 +50,11 @@ func main() {
 	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/auth/factorial", StartFactorialOAuthHandler)
 	r.HandleFunc("/auth/factorial/callback", FactorialOAuthCallbackHandler)
+	r.HandleFunc("/employees", EmployeesHandler)
+
+	staticRouter := r.PathPrefix("/static/")
+	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
+
 	http.Handle("/", r)
 
 	srv := &http.Server{
@@ -65,6 +72,7 @@ func main() {
 			log.Println(err)
 		}
 	}()
+	log.Println("Server running on port 3000")
 
 	c := make(chan os.Signal, 1)
 	// We'll accept graceful shutdowns when quit via SIGINT (Ctrl+C)
@@ -91,7 +99,11 @@ func main() {
 // token and different actions you can do
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	var t *template.Template
-	t, _ = template.New("index").Parse(indexTemplate)
+	if token == nil {
+		t, _ = template.New("index").Parse(indexTemplate)
+	} else {
+		t, _ = template.New("connected").Parse(connectedTemplate)
+	}
 	t.Execute(w, nil)
 }
 
@@ -104,10 +116,33 @@ func StartFactorialOAuthHandler(w http.ResponseWriter, r *http.Request) {
 // FactorialOAuthCallbackHandler is the handler in where we are going to receive a
 // successful callback with a code that can we use to get our user token
 func FactorialOAuthCallbackHandler(w http.ResponseWriter, r *http.Request) {
-	token, err := provider.GetTokenFromCode(r.FormValue("code"))
+	var err error
+	token, err = provider.GetTokenFromCode(r.FormValue("code"))
 	if err != nil {
 		log.Panic(err)
 	}
 	t, _ := template.New("connected").Parse(connectedTemplate)
 	t.Execute(w, token)
+}
+
+// EmployeesHandler is the handler used for get all the employees
+// and print them on a list template
+func EmployeesHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	employees, err := cl.ListEmployees()
+	if err != nil {
+		log.Panicln("Error while getting employees", err)
+	}
+	t, _ := template.New("employees").Parse(employeesTemplate)
+	t.Execute(w, struct {
+		Employees []factorial.Employee
+	}{
+		Employees: employees,
+	})
 }
