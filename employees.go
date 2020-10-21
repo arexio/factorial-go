@@ -28,7 +28,7 @@ type Employee struct {
 	AddresLine1          string `json:"address_line_1"`
 	AddressLine2         string `json:"address_line_2"`
 	SocialSecurityNumber string `json:"social_security_number"`
-	CompanyHolidaysIDs   []int  `json:"company_holidays_ids"`
+	CompanyHolidayIDs    []int  `json:"company_holiday_ids"`
 	Identifier           string `json:"identifier"`      // National identification number
 	IdentifierType       string `json:"identifier_type"` //Type of national identification. Possible value: DNI, NIE, Passport
 	Hiring               Hiring `json:"hiring"`
