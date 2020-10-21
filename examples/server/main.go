@@ -100,10 +100,15 @@ func main() {
 // token and different actions you can do
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	var t *template.Template
+	var err error
+
 	if token == nil {
-		t, _ = template.New("index").Parse(indexTemplate)
+		t, err = template.New("index").Parse(indexTemplate)
 	} else {
-		t, _ = template.New("connected").Parse(connectedTemplate)
+		t, err = template.New("connected").Parse(connectedTemplate)
+	}
+	if err != nil {
+		log.Panic(err)
 	}
 	t.Execute(w, nil)
 }
@@ -122,7 +127,10 @@ func FactorialOAuthCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panic(err)
 	}
-	t, _ := template.New("connected").Parse(connectedTemplate)
+	t, err := template.New("connected").Parse(connectedTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
 	t.Execute(w, token)
 }
 
@@ -140,7 +148,10 @@ func EmployeesHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panicln("Error while getting employees", err)
 	}
-	t, _ := template.New("employees").Parse(employeesTemplate)
+	t, err := template.New("employees").Parse(employeesTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
 	t.Execute(w, struct {
 		Employees []factorial.Employee
 	}{
