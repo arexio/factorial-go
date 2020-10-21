@@ -82,7 +82,7 @@ func (c Client) CreateEmployee(e CreateEmployeeRequest) (Employee, error) {
 func (c Client) GetEmployee(id string) (Employee, error) {
 	var employee Employee
 
-	resp, err := c.get("/api/v1/employees/" + id)
+	resp, err := c.get("/api/v1/employees/"+id, nil)
 	if err != nil {
 		return employee, err
 	}
@@ -100,7 +100,7 @@ func (c Client) GetEmployee(id string) (Employee, error) {
 func (c Client) ListEmployees() ([]Employee, error) {
 	var employees []Employee
 
-	resp, err := c.get("/api/v1/employees")
+	resp, err := c.get("/api/v1/employees", nil)
 	if err != nil {
 		return employees, err
 	}

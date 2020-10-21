@@ -2,8 +2,8 @@ package factorial
 
 import (
 	"bytes"
-	"fmt"
 	"net/http"
+	"net/url"
 )
 
 const factorialAPI = "https://api.factorialhr.com"
@@ -44,25 +44,16 @@ type Client struct {
 	apiURL string
 }
 
-func (c Client) do(req *http.Request) (*http.Response, error) {
-	resp, err := c.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("error doing request: %s", resp.Status)
-	}
-
-	return resp, nil
-}
-
-func (c Client) get(endpoint string) (*http.Response, error) {
+func (c Client) get(endpoint string, q url.Values) (*http.Response, error) {
 	req, err := http.NewRequest(http.MethodGet, c.apiURL+endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
+	if q != nil {
+		req.URL.RawQuery = q.Encode()
+	}
 
-	return c.do(req)
+	return c.Do(req)
 }
 
 func (c Client) post(endpoint string, body []byte) (*http.Response, error) {
@@ -71,7 +62,7 @@ func (c Client) post(endpoint string, body []byte) (*http.Response, error) {
 		return nil, err
 	}
 
-	return c.do(req)
+	return c.Do(req)
 }
 
 func (c Client) put(endpoint string, body []byte) (*http.Response, error) {
@@ -80,5 +71,5 @@ func (c Client) put(endpoint string, body []byte) (*http.Response, error) {
 		return nil, err
 	}
 
-	return c.do(req)
+	return c.Do(req)
 }
