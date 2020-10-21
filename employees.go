@@ -159,7 +159,7 @@ func (c Client) UpdateEmployee(id string, e UpdateEmployeeRequest) (Employee, er
 		return employee, err
 	}
 
-	resp, err := c.post("/api/v1/employees/"+id, bytes)
+	resp, err := c.put("/api/v1/employees/"+id, bytes)
 	if err != nil {
 		return employee, err
 	}
