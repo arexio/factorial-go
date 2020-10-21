@@ -23,4 +23,4 @@ Once you have this set up, you can start the server using
 go run *.go
 ```
 
-Then open your browser and navigate to http://localhost:3000, you should see the factorial button, if you click it the OAuth2 handling process will start.
+Then open your browser and navigate to http://localhost:3000, you should see the Factorial button, if you click it the OAuth2 handling process will start.
