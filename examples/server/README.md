@@ -8,7 +8,7 @@ We recommend you to start by reading the official documentation from Factorial h
 
 During the creation process you will be asked to introduce a callback url, that it should be https. In our case we use ngrok in order to expose our local server to the internet. If you want to download and play with ngrok please refer to the official documentation https://ngrok.com/.
 
-Once you have you OAuth application correctly created in Factorial, you will need to create and fill a new **.env** file with the following information.
+Once you have your OAuth application correctly created in Factorial, you will need to create and fill a new **.env** file with the following information.
 
 ```
 CLIENT_ID="---- Your client ID ----"
