@@ -4,19 +4,14 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
-	"time"
 )
 
 const factorialAPI = "https://api.factorialhr.com"
 
 // New builds a Factorial client from the provided accessToken and options.
-func New(accessToken string, opts ...Option) (*Client, error) {
+func New(opts ...Option) (*Client, error) {
 	c := &Client{
 		apiURL: factorialAPI,
-		httpClient: &http.Client{
-			Timeout: 30 * time.Second,
-		},
-		accessToken: accessToken,
 	}
 	for _, opt := range opts {
 		opt(c)
@@ -25,16 +20,16 @@ func New(accessToken string, opts ...Option) (*Client, error) {
 	return c, nil
 }
 
-// OptionHTTPClient provides a custom http client to the client.
-func OptionHTTPClient(cli httpClient) func(*Client) {
+// WithOAuth2Client provides a custom http client to the client.
+func WithOAuth2Client(cli *http.Client) func(*Client) {
 	return func(c *Client) {
-		c.httpClient = cli
+		c.Client = cli
 	}
 }
 
-// OptionAPIURL sets the API URL for the client.
+// WithAPIURL sets the API URL for the client.
 // Useful for testing.
-func OptionAPIURL(url string) func(*Client) {
+func WithAPIURL(url string) func(*Client) {
 	return func(c *Client) {
 		c.apiURL = url
 	}
@@ -43,25 +38,14 @@ func OptionAPIURL(url string) func(*Client) {
 // Option defines an option for a Client.
 type Option func(*Client)
 
-type httpClient interface {
-	Do(*http.Request) (*http.Response, error)
-}
-
 // Client for the Factorial API.
 type Client struct {
-	accessToken string
-	apiURL      string
-	httpClient  httpClient
+	*http.Client
+	apiURL string
 }
 
 func (c Client) do(req *http.Request) (*http.Response, error) {
-	authHeader := fmt.Sprintf("Bearer %s", c.accessToken)
-
-	req.Header.Set("Authorization", authHeader)
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
