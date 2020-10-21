@@ -1,6 +1,6 @@
 ## Server example
 
-This example will run a server on port 3000 with the given .env configuration, this example will give you a quick view about how to handle the OAuth2 process as well an overview of all the different endpoints you can consume from Factorial app.
+This example will run a server on port 3000 with the given .env configuration. It will give you a quick view about how to handle the OAuth2 process as well an overview of all the different endpoints you can consume from Factorial app.
 
 ## How it works
 
