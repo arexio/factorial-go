@@ -23,7 +23,8 @@ var connectedTemplate = `
 <p><a href="/documents"/>Documents</p>
 <p><a href="/hiring_versions"/>Hiring Versions</p>
 <p><a href="/company_holidays"/>Company Holidays</p>
-<p><a href="/payslips"/>Payslips</p>`
+<p><a href="/payslips"/>Payslips</p>
+<p><a href="/locations"/>Locations</p>`
 
 var employeesTemplate = `
 <h1>Employees</h1>
@@ -108,5 +109,14 @@ var payslipsTemplate = `
 <p>--  <b>GrossSalaryInCents:</b>{{.GrossSalaryInCents}}  |  <b>NetSalaryInCents:</b>{{.NetSalaryInCents}}  |  <b>IRPFInCents:</b>{{.IRPFInCents}}</p>
 <p>--  <b>IRPFPercentage:</b>{{.IRPFPercentage}} | <b>IsLastPayslip:</b>{{.IsLastPayslip}}  |  <b>StartDate:</b>{{.StartDate}}</p>
 <p>--  <b>EndDate:</b>{{.EndDate}} | <b>EmployeeID:</b>{{.EmployeeID}}  |  <b>Status:</b>{{.Status}}</p>
+{{end}}`
+
+var locationsTemplate = `
+<h1>Locations</h1>
+{{range .Locations}}
+<p>--  <b>ID:</b>{{.ID}}  |  <b>Name:</b>{{.Name}}  |  <b>Country:</b>{{.Country}}</p>
+<p>--  <b>PhoneNumber:</b>{{.PhoneNumber}}  |  <b>State:</b>{{.State}}  |  <b>City:</b>{{.City}}</p>
+<p>--  <b>AddressLine1:</b>{{.AddressLine1}} | <b>AddressLine2:</b>{{.AddressLine2}}  |  <b>PostalCode:</b>{{.PostalCode}}</p>
+<p>--  <b>CompanyHolidaysIDs:</b>{{.CompanyHolidaysIDs}}</p>
 {{end}}
 `
