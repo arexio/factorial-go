@@ -57,6 +57,7 @@ func main() {
 	r.HandleFunc("/leaves", LeavesHandler)
 	r.HandleFunc("/webhooks", WebhooksHandler)
 	r.HandleFunc("/documents", DocumentsHandler)
+	r.HandleFunc("/hiring_versions", HiringVersionsHandler)
 
 	staticRouter := r.PathPrefix("/static/")
 	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
@@ -284,5 +285,31 @@ func DocumentsHandler(w http.ResponseWriter, r *http.Request) {
 		Documents []factorial.Document
 	}{
 		Documents: documents,
+	})
+}
+
+// HiringVersionsHandler is the handler used for get all the hiring versions
+// and print them on a list template
+func HiringVersionsHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	hiringVersions, err := cl.ListHiringVersions(nil)
+	if err != nil {
+		log.Panicln("Error while getting hiring versions", err)
+	}
+	log.Println("[DEBUG] hiring versions", len(hiringVersions))
+	t, err := template.New("hiringVersions").Parse(hiringVersionsTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		HiringVersions []factorial.HiringVersion
+	}{
+		HiringVersions: hiringVersions,
 	})
 }
