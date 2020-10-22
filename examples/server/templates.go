@@ -24,7 +24,8 @@ var connectedTemplate = `
 <p><a href="/hiring_versions"/>Hiring Versions</p>
 <p><a href="/company_holidays"/>Company Holidays</p>
 <p><a href="/payslips"/>Payslips</p>
-<p><a href="/locations"/>Locations</p>`
+<p><a href="/locations"/>Locations</p>
+<p><a href="/teams"/>Teams</p>`
 
 var employeesTemplate = `
 <h1>Employees</h1>
@@ -120,3 +121,9 @@ var locationsTemplate = `
 <p>--  <b>CompanyHolidaysIDs:</b>{{.CompanyHolidaysIDs}}</p>
 {{end}}
 `
+var teamsTemplate = `
+<h1>Teams</h1>
+{{range .Teams}}
+<p>--  <b>ID:</b>{{.ID}}  |  <b>Name:</b>{{.Name}}  |  <b>EmployeeIDs:</b>{{.EmployeeIDs}}</p>
+<p>--  <b>LeadIDs:</b>{{.BaseCompensationAmountInCents}} </p>
+{{end}}`
