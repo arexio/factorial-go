@@ -2,6 +2,7 @@ package factorial
 
 import (
 	"bytes"
+	"log"
 	"net/http"
 	"net/url"
 )
@@ -49,6 +50,8 @@ func (c Client) delete(endpoint string) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 
 	return c.Do(req)
 }
@@ -61,15 +64,20 @@ func (c Client) get(endpoint string, q url.Values) (*http.Response, error) {
 	if q != nil {
 		req.URL.RawQuery = q.Encode()
 	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 
 	return c.Do(req)
 }
 
 func (c Client) post(endpoint string, body []byte) (*http.Response, error) {
+	log.Println("[DEBUG] url", c.apiURL+endpoint, string(body))
 	req, err := http.NewRequest(http.MethodPost, c.apiURL+endpoint, bytes.NewReader(body))
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 
 	return c.Do(req)
 }
@@ -79,6 +87,8 @@ func (c Client) put(endpoint string, body []byte) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 
 	return c.Do(req)
 }
