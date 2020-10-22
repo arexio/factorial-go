@@ -22,7 +22,8 @@ var connectedTemplate = `
 <p><a href="/webhooks"/>Webhooks</p>
 <p><a href="/documents"/>Documents</p>
 <p><a href="/hiring_versions"/>Hiring Versions</p>
-<p><a href="/company_holidays"/>Company Holidays</p>`
+<p><a href="/company_holidays"/>Company Holidays</p>
+<p><a href="/payslips"/>Payslips</p>`
 
 var employeesTemplate = `
 <h1>Employees</h1>
@@ -88,12 +89,24 @@ var hiringVersionsTemplate = `
 <p>--  <b>ID:</b>{{.ID}}  |  <b>EffectiveOn:</b>{{.EffectiveOn}}  |  <b>EmployeeID:</b>{{.EmployeeID}}</p>
 <p>--  <b>BaseCompensationAmountInCents:</b>{{.BaseCompensationAmountInCents}}  |  <b>BaseCompensationType:</b>{{.BaseCompensationType}}  |  <b>StartDate:</b>{{.StartDate}}</p>
 <p>--  <b>EndDate:</b>{{.EndDate}} | <b>JobTitle:</b>{{.JobTitle}}  |  <b>WorkingHoursInCents:</b>{{.WorkingHoursInCents}}</p>
-<p>--  <b>WorkingPeriodUnit:</b>{{.WorkingPeriodUnit}}</p>`
+<p>--  <b>WorkingPeriodUnit:</b>{{.WorkingPeriodUnit}}</p>
+{{end}}
+`
 
 var companyHolidaysTemplate = `
 <h1>Company Holidays</h1>
 {{range .CompanyHolidays}}
 <p>--  <b>ID:</b>{{.ID}}  |  <b>Summary:</b>{{.Summary}}  |  <b>Description:</b>{{.Description}}</p>
 <p>--  <b>Date:</b>{{.Date}}  |  <b>HalfDay:</b>{{.HalfDay}}  |  <b>LocationID:</b>{{.LocationID}}</p>
+{{end}}
+`
+
+var payslipsTemplate = `
+<h1>Payslips</h1>
+{{range .Payslips}}
+<p>--  <b>ID:</b>{{.ID}}  |  <b>BaseCotizationInCents:</b>{{.BaseCotizationInCents}}  |  <b>BaseIRPFInCents:</b>{{.BaseIRPFInCents}}</p>
+<p>--  <b>GrossSalaryInCents:</b>{{.GrossSalaryInCents}}  |  <b>NetSalaryInCents:</b>{{.NetSalaryInCents}}  |  <b>IRPFInCents:</b>{{.IRPFInCents}}</p>
+<p>--  <b>IRPFPercentage:</b>{{.IRPFPercentage}} | <b>IsLastPayslip:</b>{{.IsLastPayslip}}  |  <b>StartDate:</b>{{.StartDate}}</p>
+<p>--  <b>EndDate:</b>{{.EndDate}} | <b>EmployeeID:</b>{{.EmployeeID}}  |  <b>Status:</b>{{.Status}}</p>
 {{end}}
 `

@@ -59,6 +59,7 @@ func main() {
 	r.HandleFunc("/documents", DocumentsHandler)
 	r.HandleFunc("/hiring_versions", HiringVersionsHandler)
 	r.HandleFunc("/company_holidays", CompanyHolidaysHandler)
+	r.HandleFunc("/payslips", PayslipsHandler)
 
 	staticRouter := r.PathPrefix("/static/")
 	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
@@ -311,6 +312,32 @@ func HiringVersionsHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// PayslipsHandler is the handler used for get all the payslips
+// and print them on a list template
+func PayslipsHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	payslips, err := cl.ListPayslips(nil)
+	if err != nil {
+		log.Panicln("Error while getting payslips", err)
+	}
+	log.Println("[DEBUG] payslips", len(payslips))
+	t, err := template.New("payslips").Parse(payslipsTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		Payslips []factorial.Payslip
+	}{
+		Payslips: payslips,
+	})
+}
+
 // CompanyHolidaysHandler is the handler for get all the company holidays
 // and print them on a list template
 func CompanyHolidaysHandler(w http.ResponseWriter, r *http.Request) {
@@ -326,7 +353,6 @@ func CompanyHolidaysHandler(w http.ResponseWriter, r *http.Request) {
 		log.Panicln("Error while getting company holidays", err)
 	}
 	t, err := template.New("companyHolidays").Parse(companyHolidaysTemplate)
-
 	if err != nil {
 		log.Panic(err)
 	}
