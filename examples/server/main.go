@@ -55,6 +55,7 @@ func main() {
 	r.HandleFunc("/folders", FoldersHandler)
 	r.HandleFunc("/leave_types", LeaveTypesHandler)
 	r.HandleFunc("/leaves", LeavesHandler)
+	r.HandleFunc("/webhooks", WebhooksHandler)
 
 	staticRouter := r.PathPrefix("/static/")
 	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
@@ -212,7 +213,7 @@ func LeaveTypesHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// LeavesHandler is the handler used for get all the leavess
+// LeavesHandler is the handler used for get all the leaves
 // and print them on a list template
 func LeavesHandler(w http.ResponseWriter, r *http.Request) {
 	cl, err := factorial.New(
@@ -234,5 +235,30 @@ func LeavesHandler(w http.ResponseWriter, r *http.Request) {
 		Leaves []factorial.Leave
 	}{
 		Leaves: leaves,
+	})
+}
+
+// WebhooksHandler is the handler used for get all the webhooks
+// and print them on a list template
+func WebhooksHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	webhooks, err := cl.ListWebhooks()
+	if err != nil {
+		log.Panicln("Error while getting webhooks", err)
+	}
+	t, err := template.New("webhooks").Parse(webhooksTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		Webhooks []factorial.Webhook
+	}{
+		Webhooks: webhooks,
 	})
 }
