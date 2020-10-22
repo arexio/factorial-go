@@ -53,6 +53,8 @@ func main() {
 	r.HandleFunc("/auth/factorial/callback", FactorialOAuthCallbackHandler)
 	r.HandleFunc("/employees", EmployeesHandler)
 	r.HandleFunc("/folders", FoldersHandler)
+	r.HandleFunc("/leave_types", LeaveTypesHandler)
+	r.HandleFunc("/leaves", LeavesHandler)
 
 	staticRouter := r.PathPrefix("/static/")
 	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
@@ -182,5 +184,55 @@ func FoldersHandler(w http.ResponseWriter, r *http.Request) {
 		Folders []factorial.Folder
 	}{
 		Folders: folders,
+	})
+}
+
+// LeaveTypesHandler is the handler used for get all the leave types
+// and print them on a list template
+func LeaveTypesHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	leaveTypes, err := cl.ListLeaveTypes()
+	if err != nil {
+		log.Panicln("Error while getting leave types", err)
+	}
+	t, err := template.New("leaveTypes").Parse(leaveTypesTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		LeaveTypes []factorial.LeaveType
+	}{
+		LeaveTypes: leaveTypes,
+	})
+}
+
+// LeavesHandler is the handler used for get all the leavess
+// and print them on a list template
+func LeavesHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	leaves, err := cl.ListLeaves()
+	if err != nil {
+		log.Panicln("Error while getting leaves", err)
+	}
+	t, err := template.New("leaves").Parse(leavesTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		Leaves []factorial.Leave
+	}{
+		Leaves: leaves,
 	})
 }

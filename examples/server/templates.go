@@ -16,7 +16,9 @@ var connectedTemplate = `
 <p>Expiry: {{.Expiry}}</p>
 
 <p><a href="/employees"/>Employees</p>
-<p><a href="/folders"/>Folders</p>`
+<p><a href="/folders"/>Folders</p>
+<p><a href="/leave_types"/>Leave Types</p>
+<p><a href="/leaves"/>Leaves</p>`
 
 var employeesTemplate = `
 <h1>Employees</h1>
@@ -40,5 +42,23 @@ var foldersTemplate = `
 <p>--  <b>ID:</b>{{.ID}}  |  <b>CompanyID:</b>{{.CompanyID}}  |  <b>Name:</b>{{.Name}}</p>
 <p>--  <b>Type:</b>{{.Type}}  |  <b>Active:</b>{{.Active}}  |  <b>CreatedAt:</b>{{.CreatedAt}}</p>
 <p>--  <b>UpdatedAt:</b>{{.UpdatedAt}}
+{{end}}
+`
+var leaveTypesTemplate = `
+<h1>Leave Types</h1>
+{{range .LeaveTypes}}
+<p>--  <b>ID:</b>{{.ID}}  |  <b>Accrues:</b>{{.Accrues}}  |  <b>Active:</b>{{.Active}}</p>
+<p>--  <b>ApprovalRquired:</b>{{.ApprovalRquired}}  |  <b>Attachment:</b>{{.Attachment}}  |  <b>Color:</b>{{.Color}}</p>
+<p>--  <b>Identifier:</b>{{.Identifier}} |  <b>Name:</b>{{.Name}}  |  <b>Visibility:</b>{{.Visibility}}</p>
+<p>--  <b>Workable:</b>{{.Workable}}
+{{end}}
+`
+
+var leavesTemplate = `
+<h1>Leaves</h1>
+{{range .Leaves}}
+<p>--  <b>ID:</b>{{.ID}}  |  <b>Description:</b>{{.Description}}  |  <b>EmployeeID:</b>{{.EmployeeID}}</p>
+<p>--  <b>FinishOn:</b>{{.FinishOn}}  |  <b>HalfDay:</b>{{.HalfDay}}  |  <b>LeaveTypeID:</b>{{.LeaveTypeID}}</p>
+<p>--  <b>StartOn:</b>{{.StartOn}}
 {{end}}
 `
