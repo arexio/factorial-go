@@ -56,6 +56,7 @@ func main() {
 	r.HandleFunc("/leave_types", LeaveTypesHandler)
 	r.HandleFunc("/leaves", LeavesHandler)
 	r.HandleFunc("/webhooks", WebhooksHandler)
+	r.HandleFunc("/documents", DocumentsHandler)
 
 	staticRouter := r.PathPrefix("/static/")
 	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
@@ -173,7 +174,7 @@ func FoldersHandler(w http.ResponseWriter, r *http.Request) {
 		log.Panic(err)
 	}
 
-	folders, err := cl.ListFolder(nil)
+	folders, err := cl.ListFolders(nil)
 	if err != nil {
 		log.Panicln("Error while getting folders", err)
 	}
@@ -253,12 +254,35 @@ func WebhooksHandler(w http.ResponseWriter, r *http.Request) {
 		log.Panicln("Error while getting webhooks", err)
 	}
 	t, err := template.New("webhooks").Parse(webhooksTemplate)
-	if err != nil {
-		log.Panic(err)
-	}
 	t.Execute(w, struct {
 		Webhooks []factorial.Webhook
 	}{
 		Webhooks: webhooks,
+	})
+}
+
+// DocumentsHandler is the handler used for get all the documents
+// and print them on a list template
+func DocumentsHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	documents, err := cl.ListDocuments(nil)
+	if err != nil {
+		log.Panicln("Error while getting documents", err)
+	}
+	log.Println("[DEBUG] documents", len(documents))
+	t, err := template.New("documents").Parse(documentsTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		Documents []factorial.Document
+	}{
+		Documents: documents,
 	})
 }
