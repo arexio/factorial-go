@@ -15,23 +15,6 @@ type Team struct {
 	LeadIDs     []int  `json:"lead_ids"`
 }
 
-// ListTeams will get all the teams saved in Factorial
-func (c Client) ListTeams() ([]Team, error) {
-	var teams []Team
-
-	resp, err := c.get(teamURL, nil)
-	if err != nil {
-		return teams, err
-	}
-	defer resp.Body.Close()
-
-	if err := json.NewDecoder(resp.Body).Decode(&teams); err != nil {
-		return teams, err
-	}
-
-	return teams, nil
-}
-
 // GetTeam will get the team by the given id
 func (c Client) GetTeam(id string) (Team, error) {
 	var team Team
@@ -47,4 +30,21 @@ func (c Client) GetTeam(id string) (Team, error) {
 	}
 
 	return team, nil
+}
+
+// ListTeams will get all the teams saved in Factorial
+func (c Client) ListTeams() ([]Team, error) {
+	var teams []Team
+
+	resp, err := c.get(teamURL, nil)
+	if err != nil {
+		return teams, err
+	}
+	defer resp.Body.Close()
+
+	if err := json.NewDecoder(resp.Body).Decode(&teams); err != nil {
+		return teams, err
+	}
+
+	return teams, nil
 }
