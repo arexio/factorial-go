@@ -20,7 +20,8 @@ var connectedTemplate = `
 <p><a href="/leave_types"/>Leave Types</p>
 <p><a href="/leaves"/>Leaves</p>
 <p><a href="/webhooks"/>Webhooks</p>
-<p><a href="/documents"/>Documents</p>`
+<p><a href="/documents"/>Documents</p>
+<p><a href="/hiring_versions"/>Hiring Versions</p>`
 
 var employeesTemplate = `
 <h1>Employees</h1>
@@ -77,5 +78,15 @@ var documentsTemplate = `
 <p>--  <b>ID:</b>{{.ID}}  |  <b>EmployeeID:</b>{{.EmployeeID}}  |  <b>CompanyID:</b>{{.CompanyID}}</p>
 <p>--  <b>FolderID:</b>{{.FolderID}}  |  <b>File:</b>{{.File}}  |  <b>FileName:</b>{{.FileName}}</p>
 <p>--  <b>Public:</b>{{.Public}} | <b>CreatedAt:</b>{{.CreatedAt}}  |  <b>UpdatedAt:</b>{{.UpdatedAt}}</p>
+{{end}}
+`
+
+var hiringVersionsTemplate = `
+<h1>Hiring Versions</h1>
+{{range .HiringVersions}}
+<p>--  <b>ID:</b>{{.ID}}  |  <b>EffectiveOn:</b>{{.EffectiveOn}}  |  <b>EmployeeID:</b>{{.EmployeeID}}</p>
+<p>--  <b>BaseCompensationAmountInCents:</b>{{.BaseCompensationAmountInCents}}  |  <b>BaseCompensationType:</b>{{.BaseCompensationType}}  |  <b>StartDate:</b>{{.StartDate}}</p>
+<p>--  <b>EndDate:</b>{{.EndDate}} | <b>JobTitle:</b>{{.JobTitle}}  |  <b>WorkingHoursInCents:</b>{{.WorkingHoursInCents}}</p>
+<p>--  <b>WorkingPeriodUnit:</b>{{.WorkingPeriodUnit}}</p>
 {{end}}
 `
