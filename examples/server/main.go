@@ -172,7 +172,7 @@ func FoldersHandler(w http.ResponseWriter, r *http.Request) {
 		log.Panic(err)
 	}
 
-	folders, err := cl.ListFolder(nil)
+	folders, err := cl.ListFolders(nil)
 	if err != nil {
 		log.Panicln("Error while getting folders", err)
 	}
