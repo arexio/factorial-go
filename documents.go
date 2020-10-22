@@ -122,3 +122,13 @@ func (c Client) UpdateDocument(id string, d UpdateDocumentRequest) (Document, er
 
 	return document, nil
 }
+
+// DeleteDocument will delete the given documentID
+func (c Client) DeleteDocument(id string) error {
+	_, err := c.delete(documentURL + "/" + id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
