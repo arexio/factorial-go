@@ -26,7 +26,8 @@ var connectedTemplate = `
 <p><a href="/payslips"/>Payslips</p>
 <p><a href="/locations"/>Locations</p>
 <p><a href="/teams"/>Teams</p>
-<p><a href="/shifts"/>Shifts</p>`
+<p><a href="/shifts"/>Shifts</p>
+<p><a href="/clocks"/>Clocks</p>`
 
 var employeesTemplate = `
 <h1>Employees</h1>
@@ -132,6 +133,41 @@ var teamsTemplate = `
 var shiftsTemplate = `
 <h1>Shifts</h1>
 {{range .Shifts}}
+<p>--  <b>ID:</b>{{.ID}}  |  <b>Day:</b>{{.Day}}  |  <b>Month:</b>{{.Month}}</p>
+<p>--  <b>Year:</b>{{.Year}}  |  <b>ClockIn:</b>{{.ClockIn}}  |  <b>ClockOut:</b>{{.ClockOut}}</p>
+<p>--  <b>EmployeeID:</b>{{.EmployeeID}} | <b>Observations:</b>{{.Observations}}</p>
+{{end}}
+`
+
+var clocksTemplate = `
+<h1>Clocks</h1>
+<form action="/clock_in" method="POST" id="clockInForm">
+	<select name="employees" id="employees">
+	{{range .Employees}}
+		<option value="{{.ID}}">{{.FullName}}</option>
+	{{end}}
+	</select>
+	<input type="submit" value="Clock In">
+</form>
+{{if .ClockInShift}}
+<h2>Clock In shift</h2>
+<p>--  <b>ID:</b>{{.ID}}  |  <b>Day:</b>{{.Day}}  |  <b>Month:</b>{{.Month}}</p>
+<p>--  <b>Year:</b>{{.Year}}  |  <b>ClockIn:</b>{{.ClockIn}}  |  <b>ClockOut:</b>{{.ClockOut}}</p>
+<p>--  <b>EmployeeID:</b>{{.EmployeeID}} | <b>Observations:</b>{{.Observations}}</p>
+{{end}}
+
+</br>
+
+<form action="/clock_out" method="POST" id="clockOutForm">
+	<select name="employees" id="employees">
+	{{range .Employees}}
+		<option value="{{.ID}}">{{.FullName}}</option>
+	{{end}}
+	</select>
+	<input type="submit" value="Clock Out">
+</form>
+{{if .ClockOutShift}}
+<h2>Clock Out shift</h2>
 <p>--  <b>ID:</b>{{.ID}}  |  <b>Day:</b>{{.Day}}  |  <b>Month:</b>{{.Month}}</p>
 <p>--  <b>Year:</b>{{.Year}}  |  <b>ClockIn:</b>{{.ClockIn}}  |  <b>ClockOut:</b>{{.ClockOut}}</p>
 <p>--  <b>EmployeeID:</b>{{.EmployeeID}} | <b>Observations:</b>{{.Observations}}</p>

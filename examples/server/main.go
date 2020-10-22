@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -63,6 +64,9 @@ func main() {
 	r.HandleFunc("/locations", LocationsHandler)
 	r.HandleFunc("/teams", TeamsHandler)
 	r.HandleFunc("/shifts", ShiftsHandler)
+	r.HandleFunc("/clocks", ClocksHandler)
+	r.HandleFunc("/clock_in", ClockInHandler)
+	r.HandleFunc("/clock_out", ClockOutHandler)
 
 	staticRouter := r.PathPrefix("/static/")
 	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
@@ -441,5 +445,121 @@ func ShiftsHandler(w http.ResponseWriter, r *http.Request) {
 		Shifts []factorial.Shift
 	}{
 		Shifts: shifts,
+	})
+}
+
+// ClocksHandler is the handler used for test the clock_in and clock_out
+// and print the result
+func ClocksHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	employees, err := cl.ListEmployees()
+	if err != nil {
+		log.Panicln("Error while getting employees", err)
+	}
+	log.Println("[DEBUG] employees", len(employees))
+	t, err := template.New("clocks").Parse(clocksTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		Employees []factorial.Employee
+	}{
+		Employees: employees,
+	})
+}
+
+// ClockInHandler is the handler used for clock_in to Factorial
+// and print the result
+func ClockInHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	employees, err := cl.ListEmployees()
+	if err != nil {
+		log.Panicln("Error while getting employees", err)
+	}
+	log.Println("[DEBUG] employees", len(employees))
+
+	r.ParseForm()
+
+	employeeID, err := strconv.Atoi(r.PostForm["employees"][0])
+	if err != nil {
+		log.Panicln("Error while converting employeeID to int", err)
+	}
+
+	req := factorial.ClockInRequest{
+		EmployeeID: employeeID,
+		Now:        time.Now().Format(time.RFC3339),
+	}
+	shift, err := cl.ClockIn(req)
+	if err != nil {
+		log.Panicln("Error while clocking in", err)
+	}
+	log.Println("[DEBUG] clock_in shift", shift)
+	t, err := template.New("clocks").Parse(clocksTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		Employees     []factorial.Employee
+		ClockIntShift factorial.Shift
+	}{
+		Employees:     employees,
+		ClockIntShift: shift,
+	})
+}
+
+// ClockOutHandler is the handler used for clock_out to Factorial
+// and print the result
+func ClockOutHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	employees, err := cl.ListEmployees()
+	if err != nil {
+		log.Panicln("Error while getting employees", err)
+	}
+	log.Println("[DEBUG] employees", len(employees))
+
+	r.ParseForm()
+
+	employeeID, err := strconv.Atoi(r.PostForm["employees"][0])
+	if err != nil {
+		log.Panicln("Error while converting employeeID to int", err)
+	}
+
+	req := factorial.ClockOutRequest{
+		EmployeeID: employeeID,
+		Now:        time.Now().Format(time.RFC3339),
+	}
+	shift, err := cl.ClockOut(req)
+	if err != nil {
+		log.Panicln("Error while clocking out", err)
+	}
+	log.Println("[DEBUG] clock_out shift", shift)
+	t, err := template.New("clocks").Parse(clocksTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		Employees     []factorial.Employee
+		ClockOutShift factorial.Shift
+	}{
+		Employees:     employees,
+		ClockOutShift: shift,
 	})
 }
