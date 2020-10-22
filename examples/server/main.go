@@ -52,6 +52,7 @@ func main() {
 	r.HandleFunc("/auth/factorial", StartFactorialOAuthHandler)
 	r.HandleFunc("/auth/factorial/callback", FactorialOAuthCallbackHandler)
 	r.HandleFunc("/employees", EmployeesHandler)
+	r.HandleFunc("/folders", FoldersHandler)
 
 	staticRouter := r.PathPrefix("/static/")
 	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
@@ -156,5 +157,30 @@ func EmployeesHandler(w http.ResponseWriter, r *http.Request) {
 		Employees []factorial.Employee
 	}{
 		Employees: employees,
+	})
+}
+
+// FoldersHandler is the handler used for get all the folders
+// and print them on a list template
+func FoldersHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	folders, err := cl.ListFolder(nil)
+	if err != nil {
+		log.Panicln("Error while getting folders", err)
+	}
+	t, err := template.New("folders").Parse(foldersTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		Folders []factorial.Folder
+	}{
+		Folders: folders,
 	})
 }

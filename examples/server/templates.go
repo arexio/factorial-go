@@ -15,7 +15,8 @@ var connectedTemplate = `
 <p>RefreshToken: {{.RefreshToken}}</p>
 <p>Expiry: {{.Expiry}}</p>
 
-<p><a href="/employees"/>Employees</p>`
+<p><a href="/employees"/>Employees</p>
+<p><a href="/folders"/>Folders</p>`
 
 var employeesTemplate = `
 <h1>Employees</h1>
@@ -27,8 +28,17 @@ var employeesTemplate = `
 <p>--  <b>Gender:</b>{{.Gender}}  |  <b>Nationality:</b>{{.Nationality}}  |  <b>BankNumber:</b>{{.BankNumber}}</p>
 <p>--  <b>Country:</b>{{.Country}}  |  <b>City:</b>{{.City}}  |  <b>State:</b>{{.State}}</p>
 <p>--  <b>PostalCode:</b>{{.PostalCode}}  |  <b>AddresLine1:</b>{{.AddresLine1}}  |  <b>AddressLine2:</b>{{.AddressLine2}}</p>
-<p>--  <b>SocialSecurityNumber:</b>{{.SocialSecurityNumber}}  |  <b>CompanyHolidaysIDs:</b>{{.CompanyHolidaysIDs}}  |  <b>Identifier:</b>{{.Identifier}}</p>
+<p>--  <b>SocialSecurityNumber:</b>{{.SocialSecurityNumber}}  |  <b>CompanyHolidayIDs:</b>{{.CompanyHolidayIDs}}  |  <b>Identifier:</b>{{.Identifier}}</p>
 <p>--  <b>IdentifierType:</b>{{.IdentifierType}}  |  <b>Hiring:</b>{{.Hiring}}  |  <b>LocationID:</b>{{.LocationID}}</p>
 <p>--  <b>TeamIDs:</b>{{.TeamIDs}}</p>
+{{end}}
+`
+
+var foldersTemplate = `
+<h1>Folders</h1>
+{{range .Folders}}
+<p>--  <b>ID:</b>{{.ID}}  |  <b>CompanyID:</b>{{.CompanyID}}  |  <b>Name:</b>{{.Name}}</p>
+<p>--  <b>Type:</b>{{.Type}}  |  <b>Active:</b>{{.Active}}  |  <b>CreatedAt:</b>{{.CreatedAt}}</p>
+<p>--  <b>UpdatedAt:</b>{{.UpdatedAt}}
 {{end}}
 `

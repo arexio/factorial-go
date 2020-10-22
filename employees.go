@@ -4,6 +4,10 @@ import (
 	"encoding/json"
 )
 
+const (
+	employeeURL = "/api/v1/employees"
+)
+
 // Employee contains all the employee information.
 type Employee struct {
 	ID                   int    `json:"id"`
@@ -28,7 +32,7 @@ type Employee struct {
 	AddresLine1          string `json:"address_line_1"`
 	AddressLine2         string `json:"address_line_2"`
 	SocialSecurityNumber string `json:"social_security_number"`
-	CompanyHolidaysIDs   []int  `json:"company_holidays_ids"`
+	CompanyHolidayIDs    []int  `json:"company_holiday_ids"`
 	Identifier           string `json:"identifier"`      // National identification number
 	IdentifierType       string `json:"identifier_type"` //Type of national identification. Possible value: DNI, NIE, Passport
 	Hiring               Hiring `json:"hiring"`
@@ -66,7 +70,7 @@ func (c Client) CreateEmployee(e CreateEmployeeRequest) (Employee, error) {
 		return employee, err
 	}
 
-	resp, err := c.post("/api/v1/employees", bytes)
+	resp, err := c.post(employeeURL, bytes)
 	if err != nil {
 		return employee, err
 	}
@@ -82,7 +86,7 @@ func (c Client) CreateEmployee(e CreateEmployeeRequest) (Employee, error) {
 func (c Client) GetEmployee(id string) (Employee, error) {
 	var employee Employee
 
-	resp, err := c.get("/api/v1/employees/" + id)
+	resp, err := c.get(employeeURL+"/"+id, nil)
 	if err != nil {
 		return employee, err
 	}
@@ -100,7 +104,7 @@ func (c Client) GetEmployee(id string) (Employee, error) {
 func (c Client) ListEmployees() ([]Employee, error) {
 	var employees []Employee
 
-	resp, err := c.get("/api/v1/employees")
+	resp, err := c.get(employeeURL, nil)
 	if err != nil {
 		return employees, err
 	}
@@ -127,7 +131,7 @@ func (c Client) TerminateEmployee(id, date, reason string) (Employee, error) {
 		return employee, err
 	}
 
-	resp, err := c.post("/api/v1/employees/"+id+"/terminate", bytes)
+	resp, err := c.post(employeeURL+"/"+id+"/terminate", bytes)
 	if err != nil {
 		return employee, err
 	}
@@ -159,7 +163,7 @@ func (c Client) UpdateEmployee(id string, e UpdateEmployeeRequest) (Employee, er
 		return employee, err
 	}
 
-	resp, err := c.post("/api/v1/employees/"+id, bytes)
+	resp, err := c.put(employeeURL+"/"+id, bytes)
 	if err != nil {
 		return employee, err
 	}
@@ -176,7 +180,7 @@ func (c Client) UpdateEmployee(id string, e UpdateEmployeeRequest) (Employee, er
 func (c Client) UnterminateEmployee(id string) (Employee, error) {
 	var employee Employee
 
-	resp, err := c.post("/api/v1/employees/"+id+"/terminate", nil)
+	resp, err := c.post(employeeURL+"/"+id+"/terminate", nil)
 	if err != nil {
 		return employee, err
 	}
