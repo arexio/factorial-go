@@ -17,16 +17,14 @@ type TokenRepository interface {
 // with a custom repository
 type tokenRefresher struct {
 	repo     TokenRepository
-	token    *oauth2.Token
 	id       uuid.UUID
 	provider *OAuthProvider
 }
 
 // NewTokenSource will build a new token source with the given criteria
-func NewTokenSource(repo TokenRepository, token *oauth2.Token, id uuid.UUID, provider *OAuthProvider) oauth2.TokenSource {
+func NewTokenSource(repo TokenRepository, id uuid.UUID, provider *OAuthProvider) oauth2.TokenSource {
 	return &tokenRefresher{
 		repo:     repo,
-		token:    token,
 		id:       id,
 		provider: provider,
 	}
@@ -35,8 +33,12 @@ func NewTokenSource(repo TokenRepository, token *oauth2.Token, id uuid.UUID, pro
 // Token method is the custom implementation of the refresh token process using
 // a token repo as a base
 func (t *tokenRefresher) Token() (*oauth2.Token, error) {
-	if !t.token.Valid() {
-		token, err := t.provider.RefreshToken(t.token)
+	token, err := t.repo.GetToken(t.id)
+	if err != nil {
+		return nil, err
+	}
+	if !token.Valid() {
+		token, err := t.provider.RefreshToken(token)
 		if err != nil {
 			return nil, err
 		}
@@ -45,5 +47,5 @@ func (t *tokenRefresher) Token() (*oauth2.Token, error) {
 		}
 		return token, nil
 	}
-	return t.token, nil
+	return token, nil
 }
