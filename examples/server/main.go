@@ -60,6 +60,7 @@ func main() {
 	r.HandleFunc("/hiring_versions", HiringVersionsHandler)
 	r.HandleFunc("/company_holidays", CompanyHolidaysHandler)
 	r.HandleFunc("/payslips", PayslipsHandler)
+	r.HandleFunc("/locations", LocationsHandler)
 
 	staticRouter := r.PathPrefix("/static/")
 	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
@@ -360,5 +361,31 @@ func CompanyHolidaysHandler(w http.ResponseWriter, r *http.Request) {
 		CompanyHolidays []factorial.CompanyHoliday
 	}{
 		CompanyHolidays: companyHolidays,
+	})
+}
+
+// LocationsHandler is the handler used for get all the locations
+// and print them on a list template
+func LocationsHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	locations, err := cl.ListLocations()
+	if err != nil {
+		log.Panicln("Error while getting locations", err)
+	}
+	log.Println("[DEBUG] locations", len(locations))
+	t, err := template.New("locations").Parse(locationsTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		Locations []factorial.Location
+	}{
+		Locations: locations,
 	})
 }
