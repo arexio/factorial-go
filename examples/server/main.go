@@ -468,7 +468,9 @@ func ClocksHandler(w http.ResponseWriter, r *http.Request) {
 		log.Panic(err)
 	}
 	t.Execute(w, struct {
-		Employees []factorial.Employee
+		Employees     []factorial.Employee
+		ClockInShift  *factorial.Shift
+		ClockOutShift *factorial.Shift
 	}{
 		Employees: employees,
 	})
@@ -499,7 +501,7 @@ func ClockInHandler(w http.ResponseWriter, r *http.Request) {
 
 	req := factorial.ClockInRequest{
 		EmployeeID: employeeID,
-		Now:        time.Now().Format(time.RFC3339),
+		Now:        time.Now().Format("2006-01-02T15:04:05-0700"),
 	}
 	shift, err := cl.ClockIn(req)
 	if err != nil {
@@ -512,10 +514,11 @@ func ClockInHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	t.Execute(w, struct {
 		Employees     []factorial.Employee
-		ClockIntShift factorial.Shift
+		ClockInShift  factorial.Shift
+		ClockOutShift *factorial.Shift
 	}{
-		Employees:     employees,
-		ClockIntShift: shift,
+		Employees:    employees,
+		ClockInShift: shift,
 	})
 }
 
@@ -544,7 +547,7 @@ func ClockOutHandler(w http.ResponseWriter, r *http.Request) {
 
 	req := factorial.ClockOutRequest{
 		EmployeeID: employeeID,
-		Now:        time.Now().Format(time.RFC3339),
+		Now:        time.Now().Format("2006-01-02T15:04:05-0700"),
 	}
 	shift, err := cl.ClockOut(req)
 	if err != nil {
@@ -558,6 +561,7 @@ func ClockOutHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, struct {
 		Employees     []factorial.Employee
 		ClockOutShift factorial.Shift
+		ClockInShift  *factorial.Shift
 	}{
 		Employees:     employees,
 		ClockOutShift: shift,

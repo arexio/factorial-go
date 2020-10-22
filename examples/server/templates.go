@@ -149,7 +149,9 @@ var clocksTemplate = `
 	</select>
 	<input type="submit" value="Clock In">
 </form>
-{{if .ClockInShift}}
+
+
+{{with .ClockInShift}}
 <h2>Clock In shift</h2>
 <p>--  <b>ID:</b>{{.ID}}  |  <b>Day:</b>{{.Day}}  |  <b>Month:</b>{{.Month}}</p>
 <p>--  <b>Year:</b>{{.Year}}  |  <b>ClockIn:</b>{{.ClockIn}}  |  <b>ClockOut:</b>{{.ClockOut}}</p>
@@ -166,7 +168,8 @@ var clocksTemplate = `
 	</select>
 	<input type="submit" value="Clock Out">
 </form>
-{{if .ClockOutShift}}
+
+{{with .ClockOutShift}}
 <h2>Clock Out shift</h2>
 <p>--  <b>ID:</b>{{.ID}}  |  <b>Day:</b>{{.Day}}  |  <b>Month:</b>{{.Month}}</p>
 <p>--  <b>Year:</b>{{.Year}}  |  <b>ClockIn:</b>{{.ClockIn}}  |  <b>ClockOut:</b>{{.ClockOut}}</p>

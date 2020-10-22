@@ -20,7 +20,7 @@ type Shift struct {
 	Year         int    `json:"year"`
 	ClockIn      string `json:"clock_in"`
 	ClockOut     string `json:"clock_out"`
-	EmployeeID   bool   `json:"employee_id"`
+	EmployeeID   int    `json:"employee_id"`
 	Observations string `json:"observations"`
 }
 
