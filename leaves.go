@@ -122,10 +122,10 @@ type Leave struct {
 // CreateLeaveRequest keeps the information needed
 // for create a new leave
 type CreateLeaveRequest struct {
-	Description string `json:"description,ompitempty"`
+	Description string `json:"description,omitempty"`
 	EmployeeID  int    `json:"employee_id"`
 	FinishOn    string `json:"finish_on"`
-	HalfDay     string `json:"half_day,ompitempty"`
+	HalfDay     string `json:"half_day,omitempty"`
 	LeaveTypeID int    `json:"leave_type_id"`
 	StartOn     string `json:"start_on"`
 }
@@ -133,12 +133,12 @@ type CreateLeaveRequest struct {
 // UpdateLeaveRequest keeps the information needed
 // for update a leave
 type UpdateLeaveRequest struct {
-	Description string `json:"description,ompitempty"`
-	EmployeeID  int    `json:"employee_id,ompitempty"`
-	FinishOn    string `json:"finish_on,ompitempty"`
-	HalfDay     string `json:"half_day,ompitempty"`
-	LeaveTypeID int    `json:"leave_type_id,ompitempty"`
-	StartOn     string `json:"start_on,ompitempty"`
+	Description string `json:"description,omitempty"`
+	EmployeeID  int    `json:"employee_id,omitempty"`
+	FinishOn    string `json:"finish_on,omitempty"`
+	HalfDay     string `json:"half_day,omitempty"`
+	LeaveTypeID int    `json:"leave_type_id,omitempty"`
+	StartOn     string `json:"start_on,omitempty"`
 }
 
 // CreateLeave creates a new leave.
