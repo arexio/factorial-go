@@ -72,9 +72,9 @@ func (c Client) GetFolder(id string) (Folder, error) {
 	return folder, nil
 }
 
-// ListFolder gets all the folder from you company
+// ListFolders gets all the folder from you company
 // you can filter this list by name and active
-func (c Client) ListFolder(filter url.Values) ([]Folder, error) {
+func (c Client) ListFolders(filter url.Values) ([]Folder, error) {
 	var folders []Folder
 
 	resp, err := c.get(folderURL, filter)
