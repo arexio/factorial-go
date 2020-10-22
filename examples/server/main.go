@@ -62,6 +62,7 @@ func main() {
 	r.HandleFunc("/payslips", PayslipsHandler)
 	r.HandleFunc("/locations", LocationsHandler)
 	r.HandleFunc("/teams", TeamsHandler)
+	r.HandleFunc("/shifts", ShiftsHandler)
 
 	staticRouter := r.PathPrefix("/static/")
 	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
@@ -414,5 +415,31 @@ func TeamsHandler(w http.ResponseWriter, r *http.Request) {
 		Teams []factorial.Team
 	}{
 		Teams: teams,
+	})
+}
+
+// ShiftsHandler is the handler used for get all the shifts
+// and print them on a list template
+func ShiftsHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	shifts, err := cl.ListShifts(nil)
+	if err != nil {
+		log.Panicln("Error while getting shifts", err)
+	}
+	log.Println("[DEBUG] shifts", len(shifts))
+	t, err := template.New("shifts").Parse(shiftsTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		Shifts []factorial.Shift
+	}{
+		Shifts: shifts,
 	})
 }
