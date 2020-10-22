@@ -61,6 +61,7 @@ func main() {
 	r.HandleFunc("/company_holidays", CompanyHolidaysHandler)
 	r.HandleFunc("/payslips", PayslipsHandler)
 	r.HandleFunc("/locations", LocationsHandler)
+	r.HandleFunc("/teams", TeamsHandler)
 
 	staticRouter := r.PathPrefix("/static/")
 	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
@@ -387,5 +388,31 @@ func LocationsHandler(w http.ResponseWriter, r *http.Request) {
 		Locations []factorial.Location
 	}{
 		Locations: locations,
+	})
+}
+
+// TeamsHandler is the handler used for get all the teams
+// and print them on a list template
+func TeamsHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	teams, err := cl.ListTeams()
+	if err != nil {
+		log.Panicln("Error while getting teams", err)
+	}
+	log.Println("[DEBUG] teams", len(teams))
+	t, err := template.New("teams").Parse(teamsTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		Teams []factorial.Team
+	}{
+		Teams: teams,
 	})
 }
