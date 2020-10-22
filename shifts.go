@@ -6,7 +6,9 @@ import (
 )
 
 const (
-	shiftURL = "/api/v1/shifts"
+	shiftURL    = "/api/v1/shifts"
+	clockInURL  = shiftURL + "/clock_in"
+	clockOutURL = shiftURL + "/clock_out"
 )
 
 // Shift keeps the basic information related
@@ -55,7 +57,7 @@ func (c Client) ClockIn(cin ClockInRequest) (Shift, error) {
 		return shift, err
 	}
 
-	resp, err := c.post(shiftURL, bytes)
+	resp, err := c.post(clockInURL, bytes)
 	if err != nil {
 		return shift, err
 	}
@@ -77,7 +79,7 @@ func (c Client) ClockOut(cout ClockOutRequest) (Shift, error) {
 		return shift, err
 	}
 
-	resp, err := c.post(shiftURL, bytes)
+	resp, err := c.post(clockOutURL, bytes)
 	if err != nil {
 		return shift, err
 	}
