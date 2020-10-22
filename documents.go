@@ -45,42 +45,6 @@ type UpdateDocumentRequest struct {
 	Signees           []int `json:"signees"`
 }
 
-// ListDocuments gets all the documents from your company
-// you can filter this list by employee_id and folder_id
-func (c Client) ListDocuments(filter url.Values) ([]Document, error) {
-	var documents []Document
-
-	resp, err := c.get(documentURL, filter)
-	if err != nil {
-		return documents, err
-	}
-	defer resp.Body.Close()
-
-	if err := json.NewDecoder(resp.Body).Decode(&documents); err != nil {
-		return documents, err
-	}
-
-	return documents, nil
-}
-
-// GetDocument return the document saved in Factorial with
-// the given id
-func (c Client) GetDocument(id string) (Document, error) {
-	var document Document
-
-	resp, err := c.get(documentURL+"/"+id, nil)
-	if err != nil {
-		return document, err
-	}
-	defer resp.Body.Close()
-
-	if err := json.NewDecoder(resp.Body).Decode(&document); err != nil {
-		return document, err
-	}
-
-	return document, nil
-}
-
 // CreateDocument creates a new document in Factorial
 func (c Client) CreateDocument(d CreateDocumentRequest) (Document, error) {
 	var document Document
@@ -102,6 +66,52 @@ func (c Client) CreateDocument(d CreateDocumentRequest) (Document, error) {
 	return document, nil
 }
 
+// DeleteDocument will delete the given documentID
+func (c Client) DeleteDocument(id string) error {
+	_, err := c.delete(documentURL + "/" + id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// GetDocument return the document saved in Factorial with
+// the given id
+func (c Client) GetDocument(id string) (Document, error) {
+	var document Document
+
+	resp, err := c.get(documentURL+"/"+id, nil)
+	if err != nil {
+		return document, err
+	}
+	defer resp.Body.Close()
+
+	if err := json.NewDecoder(resp.Body).Decode(&document); err != nil {
+		return document, err
+	}
+
+	return document, nil
+}
+
+// ListDocuments gets all the documents from your company
+// you can filter this list by employee_id and folder_id
+func (c Client) ListDocuments(filter url.Values) ([]Document, error) {
+	var documents []Document
+
+	resp, err := c.get(documentURL, filter)
+	if err != nil {
+		return documents, err
+	}
+	defer resp.Body.Close()
+
+	if err := json.NewDecoder(resp.Body).Decode(&documents); err != nil {
+		return documents, err
+	}
+
+	return documents, nil
+}
+
 // UpdateDocument update the given document id with the given data
 func (c Client) UpdateDocument(id string, d UpdateDocumentRequest) (Document, error) {
 	var document Document
@@ -121,14 +131,4 @@ func (c Client) UpdateDocument(id string, d UpdateDocumentRequest) (Document, er
 	}
 
 	return document, nil
-}
-
-// DeleteDocument will delete the given documentID
-func (c Client) DeleteDocument(id string) error {
-	_, err := c.delete(documentURL + "/" + id)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
