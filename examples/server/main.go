@@ -55,6 +55,7 @@ func main() {
 	r.HandleFunc("/folders", FoldersHandler)
 	r.HandleFunc("/leave_types", LeaveTypesHandler)
 	r.HandleFunc("/leaves", LeavesHandler)
+	r.HandleFunc("/documents", DocumentsHandler)
 
 	staticRouter := r.PathPrefix("/static/")
 	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
@@ -234,5 +235,31 @@ func LeavesHandler(w http.ResponseWriter, r *http.Request) {
 		Leaves []factorial.Leave
 	}{
 		Leaves: leaves,
+	})
+}
+
+// DocumentsHandler is the handler used for get all the documents
+// and print them on a list template
+func DocumentsHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	documents, err := cl.ListDocuments(nil)
+	if err != nil {
+		log.Panicln("Error while getting documents", err)
+	}
+	log.Println("[DEBUG] documents", len(documents))
+	t, err := template.New("documents").Parse(documentsTemplate)
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		Documents []factorial.Document
+	}{
+		Documents: documents,
 	})
 }

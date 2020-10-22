@@ -18,7 +18,8 @@ var connectedTemplate = `
 <p><a href="/employees"/>Employees</p>
 <p><a href="/folders"/>Folders</p>
 <p><a href="/leave_types"/>Leave Types</p>
-<p><a href="/leaves"/>Leaves</p>`
+<p><a href="/leaves"/>Leaves</p>
+<p><a href="/documents"/>Documents</p>`
 
 var employeesTemplate = `
 <h1>Employees</h1>
@@ -60,5 +61,14 @@ var leavesTemplate = `
 <p>--  <b>ID:</b>{{.ID}}  |  <b>Description:</b>{{.Description}}  |  <b>EmployeeID:</b>{{.EmployeeID}}</p>
 <p>--  <b>FinishOn:</b>{{.FinishOn}}  |  <b>HalfDay:</b>{{.HalfDay}}  |  <b>LeaveTypeID:</b>{{.LeaveTypeID}}</p>
 <p>--  <b>StartOn:</b>{{.StartOn}}
+{{end}}
+`
+
+var documentsTemplate = `
+<h1>Documents</h1>
+{{range .Documents}}
+<p>--  <b>ID:</b>{{.ID}}  |  <b>EmployeeID:</b>{{.EmployeeID}}  |  <b>CompanyID:</b>{{.CompanyID}}</p>
+<p>--  <b>FolderID:</b>{{.FolderID}}  |  <b>File:</b>{{.File}}  |  <b>FileName:</b>{{.FileName}}</p>
+<p>--  <b>Public:</b>{{.Public}} | <b>CreatedAt:</b>{{.CreatedAt}}  |  <b>UpdatedAt:</b>{{.UpdatedAt}}</p>
 {{end}}
 `
