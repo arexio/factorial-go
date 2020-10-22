@@ -44,6 +44,15 @@ type Client struct {
 	apiURL string
 }
 
+func (c Client) delete(endpoint string) (*http.Response, error) {
+	req, err := http.NewRequest(http.MethodDelete, c.apiURL+endpoint, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Do(req)
+}
+
 func (c Client) get(endpoint string, q url.Values) (*http.Response, error) {
 	req, err := http.NewRequest(http.MethodGet, c.apiURL+endpoint, nil)
 	if err != nil {
