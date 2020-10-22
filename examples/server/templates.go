@@ -21,7 +21,8 @@ var connectedTemplate = `
 <p><a href="/leaves"/>Leaves</p>
 <p><a href="/webhooks"/>Webhooks</p>
 <p><a href="/documents"/>Documents</p>
-<p><a href="/hiring_versions"/>Hiring Versions</p>`
+<p><a href="/hiring_versions"/>Hiring Versions</p>
+<p><a href="/company_holidays"/>Company Holidays</p>`
 
 var employeesTemplate = `
 <h1>Employees</h1>
@@ -87,6 +88,12 @@ var hiringVersionsTemplate = `
 <p>--  <b>ID:</b>{{.ID}}  |  <b>EffectiveOn:</b>{{.EffectiveOn}}  |  <b>EmployeeID:</b>{{.EmployeeID}}</p>
 <p>--  <b>BaseCompensationAmountInCents:</b>{{.BaseCompensationAmountInCents}}  |  <b>BaseCompensationType:</b>{{.BaseCompensationType}}  |  <b>StartDate:</b>{{.StartDate}}</p>
 <p>--  <b>EndDate:</b>{{.EndDate}} | <b>JobTitle:</b>{{.JobTitle}}  |  <b>WorkingHoursInCents:</b>{{.WorkingHoursInCents}}</p>
-<p>--  <b>WorkingPeriodUnit:</b>{{.WorkingPeriodUnit}}</p>
+<p>--  <b>WorkingPeriodUnit:</b>{{.WorkingPeriodUnit}}</p>`
+
+var companyHolidaysTemplate = `
+<h1>Company Holidays</h1>
+{{range .CompanyHolidays}}
+<p>--  <b>ID:</b>{{.ID}}  |  <b>Summary:</b>{{.Summary}}  |  <b>Description:</b>{{.Description}}</p>
+<p>--  <b>Date:</b>{{.Date}}  |  <b>HalfDay:</b>{{.HalfDay}}  |  <b>LocationID:</b>{{.LocationID}}</p>
 {{end}}
 `

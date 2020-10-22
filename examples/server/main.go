@@ -58,6 +58,7 @@ func main() {
 	r.HandleFunc("/webhooks", WebhooksHandler)
 	r.HandleFunc("/documents", DocumentsHandler)
 	r.HandleFunc("/hiring_versions", HiringVersionsHandler)
+	r.HandleFunc("/company_holidays", CompanyHolidaysHandler)
 
 	staticRouter := r.PathPrefix("/static/")
 	staticRouter.Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./public"))))
@@ -276,7 +277,6 @@ func DocumentsHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panicln("Error while getting documents", err)
 	}
-	log.Println("[DEBUG] documents", len(documents))
 	t, err := template.New("documents").Parse(documentsTemplate)
 	if err != nil {
 		log.Panic(err)
@@ -304,12 +304,35 @@ func HiringVersionsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("[DEBUG] hiring versions", len(hiringVersions))
 	t, err := template.New("hiringVersions").Parse(hiringVersionsTemplate)
-	if err != nil {
-		log.Panic(err)
-	}
 	t.Execute(w, struct {
 		HiringVersions []factorial.HiringVersion
 	}{
 		HiringVersions: hiringVersions,
+	})
+}
+
+// CompanyHolidaysHandler is the handler for get all the company holidays
+// and print them on a list template
+func CompanyHolidaysHandler(w http.ResponseWriter, r *http.Request) {
+	cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.Client(token)),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	companyHolidays, err := cl.ListCompanyHolidays()
+	if err != nil {
+		log.Panicln("Error while getting company holidays", err)
+	}
+	t, err := template.New("companyHolidays").Parse(companyHolidaysTemplate)
+
+	if err != nil {
+		log.Panic(err)
+	}
+	t.Execute(w, struct {
+		CompanyHolidays []factorial.CompanyHoliday
+	}{
+		CompanyHolidays: companyHolidays,
 	})
 }
