@@ -181,7 +181,7 @@ func (c Client) DeleteLeave(id string) error {
 func (c Client) ListLeaves() ([]Leave, error) {
 	var leaves []Leave
 
-	resp, err := c.get(leaveTypeURL, nil)
+	resp, err := c.get(leaveURL, nil)
 	if err != nil {
 		return leaves, err
 	}
