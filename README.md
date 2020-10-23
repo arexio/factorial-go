@@ -31,6 +31,7 @@ On the next snippet you can see how we build our client
 		factorial.WithScopes(scopes),
 		factorial.WithRedirectURL(redirectURL),
 	)
+
     // Build the factorial client
     cl, err := factorial.New(
 		factorial.WithOAuth2Client(provider.Client(token)),
@@ -38,6 +39,7 @@ On the next snippet you can see how we build our client
 	if err != nil {
 		// Track error
 	}
+
     // Use the factorial client for retrieve a list of employees
     employees, err := cl.ListEmployees()
 	if err != nil {
@@ -48,5 +50,35 @@ On the next snippet you can see how we build our client
 The next snippet will show you how to use the factorial client based on our token repository
 
 ```
+    // Build the Oauth provider
+    provider = factorial.NewOAuthProvider(
+		factorial.WithClientID(clientID),
+		factorial.WithClientSecret(clientSecret),
+		factorial.WithScopes(scopes),
+		factorial.WithRedirectURL(redirectURL),
+	)
 
+    // You can find the token repository on the repository.go file
+    // as well a sample implementation on the persistence sample
+	repo = NewMemoryRepository()
+
+    // Build a new OAuth client with a custom Source with repository
+    cl, err := factorial.New(
+		factorial.WithOAuth2Client(provider.ClientWithSource(
+			factorial.NewTokenSource(
+				repo,
+				uuid.Nil,
+				provider,
+			),
+		)),
+	)
+	if err != nil {
+		// Track error
+	}
+
+    // Use the factorial client for retrieve a list of employees
+    employees, err := cl.ListEmployees()
+	if err != nil {
+		// Track error
+	}
 ```
