@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/gofrs/uuid"
-
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 
