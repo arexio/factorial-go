@@ -91,3 +91,13 @@ func (o OAuthProvider) RefreshToken(t *oauth2.Token) (*oauth2.Token, error) {
 func (o OAuthProvider) Client(t *oauth2.Token) *http.Client {
 	return o.conf.Client(o.ctx, t)
 }
+
+// ClientWithSource will return a new http.Client for us in our calls, this
+// method receives a custom tokenSource that can be used for persist our token
+func (o OAuthProvider) ClientWithSource(s oauth2.TokenSource) *http.Client {
+	return &http.Client{
+		Transport: &oauth2.Transport{
+			Source: s,
+		},
+	}
+}
