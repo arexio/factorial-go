@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/arexio/factorial-go"
 	"github.com/gofrs/uuid"
 	"golang.org/x/oauth2"
+	
+	"github.com/arexio/factorial-go"
 )
 
 type memoryRepository struct {
