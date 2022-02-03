@@ -2,7 +2,6 @@ package factorial
 
 import (
 	"bytes"
-	"log"
 	"net/http"
 	"net/url"
 )
@@ -71,7 +70,6 @@ func (c Client) get(endpoint string, q url.Values) (*http.Response, error) {
 }
 
 func (c Client) post(endpoint string, body []byte) (*http.Response, error) {
-	log.Println("[DEBUG] url", c.apiURL+endpoint, string(body))
 	req, err := http.NewRequest(http.MethodPost, c.apiURL+endpoint, bytes.NewReader(body))
 	if err != nil {
 		return nil, err
